@@ -1,0 +1,17 @@
+# 忽略一切
+*
+
+# 不忽略 .gitignore 本身
+!.gitignore
+
+# 只保留 Assets/Custom RP 文件夹
+# 需要逐级取消忽略，Git 要求父目录不被忽略才能包含子目录
+!Assets/
+!Assets/Custom RP/
+!Assets/Custom RP/**
+
+# 排除 macOS 系统文件
+.DS_Store
+
+# 排除 Unity meta 文件
+*.meta
