@@ -3,6 +3,7 @@
 
 // 1. 最先引入官方的通用宏定义库
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 
 // 2. 引入我们自己的 UnityInput 变量声明
 #include "UnityInput.hlsl"

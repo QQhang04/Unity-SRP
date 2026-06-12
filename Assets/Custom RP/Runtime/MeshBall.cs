@@ -3,8 +3,10 @@ using UnityEngine;
 public class MeshBall : MonoBehaviour {
 
     // 预先缓存 Shader 属性的 ID，避免在 Update 中使用字符串导致 CPU 性能开销
-    static int baseColorId = Shader.PropertyToID("_BaseColor");
-
+    static int
+        baseColorId = Shader.PropertyToID("_BaseColor"),
+        metallicId = Shader.PropertyToID("_Metallic"),
+        smoothnessId = Shader.PropertyToID("_Smoothness");
     [SerializeField]
     private Mesh mesh = default;
 
@@ -17,6 +19,10 @@ public class MeshBall : MonoBehaviour {
     // 在 CPU 端开辟的数组，分别存放 1023 个实例的 变换矩阵 和 颜色数据
     private Matrix4x4[] matrices = new Matrix4x4[MAX_INSTANCE_COUNT];
     private Vector4[] baseColors = new Vector4[MAX_INSTANCE_COUNT];
+    
+    float[]
+        metallic = new float[1023],
+        smoothness = new float[1023];
 
     // Unity 材质属性块，用于在不破坏合批的前提下，向 GPU 批量传递自定义材质属性（数组）
     private MaterialPropertyBlock block;
@@ -38,6 +44,9 @@ public class MeshBall : MonoBehaviour {
                 Random.value, 
                 1f
             );
+            
+            metallic[i] = Random.value < 0.25f ? 1f : 0f;
+            smoothness[i] = Random.Range(0.05f, 0.95f);
         }
     }
 
@@ -53,6 +62,8 @@ public class MeshBall : MonoBehaviour {
             block = new MaterialPropertyBlock();
             // 将 CPU 端的 Vector4 数组一次性打包绑定到属性块中
             block.SetVectorArray(baseColorId, baseColors);
+            block.SetFloatArray(metallicId, metallic);
+            block.SetFloatArray(smoothnessId, smoothness);
         }
 
         // 核心魔法：绕过 GameObject 架构，直接向底层图形 API 发送单次合批绘制指令
