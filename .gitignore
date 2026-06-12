@@ -9,6 +9,8 @@
 !Assets/
 !Assets/Custom RP/
 !Assets/Custom RP/**
+!Assets/Editor/
+!Assets/Editor/**
 
 # 排除 macOS 系统文件
 .DS_Store
